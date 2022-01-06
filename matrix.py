@@ -59,6 +59,24 @@ class Matrix:
     def rref(self):
         return Matrix_rref(Matrix(*self.entries))
 
+    def inverse(self):
+        assert self.m == self.n
+
+        return Matrix_rref(Matrix_combine_horizontal(self, Matrix_identity(self.n))) \
+               .submatrix(self.n, 0, self.n, self.n)
+
+    def submatrix(self, left, top, width, height):
+        rows = []
+
+        for i in range(top, top + height):
+            row = []
+            for j in range(left, left + width):
+                row.append(self.at(i, j))
+            rows.append(row)
+
+        return Matrix(*rows)
+
+
 def Matrix_identity(n):
     rows = []
 
@@ -114,3 +132,18 @@ def Matrix_rref(matrix):
             matrix = matrix.add_rows(i, pivot_i, matrix.at(i, pivot_j).add_inv())
     
     return matrix
+
+def Matrix_combine_horizontal(a, b):
+    assert a.m == b.m
+
+    rows = []
+    for i in range(a.m):
+        row = []
+        for j in range(a.n + b.n):
+            if j < a.n:
+                row.append(a.at(i, j))
+            else:
+                row.append(b.at(i, j - a.n))
+        rows.append(row)
+
+    return Matrix(*rows)

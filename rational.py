@@ -27,6 +27,10 @@ class Q:
         self.p = p // g
         self.q = q // g
 
+        if self.q < 0:
+            self.p = -self.p
+            self.q = -self.q
+
     def __str__(self):
         return self.to_string()
 
