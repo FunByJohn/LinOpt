@@ -1,5 +1,3 @@
-import sys
-import re
 from rational import *
 
 class Matrix:
@@ -11,29 +9,76 @@ class Matrix:
             row = []
 
             for entry in line:
-                if isinstance(entry, Q):
-                    row.append(Q(entry.p, entry.q))
-                elif isinstance(entry, int):
-                    row.append(Q(entry, 1))
-                elif isinstance(entry, str):
-                    if '/' in entry:
-                        (p, q) = re.split('\s*/\s*', entry)
-                        row.append(Q(int(p), int(q)))
-                    else:
-                        row.append(Q(int(entry)))
-                else:
-                    raise SystemExit('Error in matrix initialization: unsupported type given as input')
+                row.append(Q(entry))
             
             self.entries.append(row)
 
         self.m = len(self.entries)
         self.n = len(self.entries[0])
 
+    def __str__(self):
+        return str(self.entries)
+
     def at(self, i, j):
         return self.entries[i][j]
 
-    def __str__(self):
-        return str(self.entries)
+    def transpose(self):
+        rows = []
+
+        for i in range(self.n):
+            row = []
+            for j in range(self.m):
+                row.append(self.at(j, i))
+            rows.append(row)
+
+        return Matrix(*rows)
+
+    def swap_rows(self, i, j):
+        swap = Matrix_identity(self.m)
+        swap.entries[i][i] = Q(0)
+        swap.entries[j][j] = Q(0)
+        swap.entries[i][j] = Q(1)
+        swap.entries[j][i] = Q(1)
+
+        return Matrix_mul(swap, self)
+
+    def scale_row(self, i, scalar):
+        assert scalar.p != 0
+
+        scale = Matrix_identity(self.m)
+        scale.entries[i][i] = Q(scalar)
+
+        return Matrix_mul(scale, self)
+
+    def add_rows(self, i, j, scalar):
+        add = Matrix_identity(self.m)
+        add.entries[i][j] = Q(scalar)
+
+        return Matrix_mul(add, self)
+
+    #def rref(self):
+    #    def alg(matrix):
+    #        left = 0
+    #        top = 0
+    #
+    #        while left != matrix.n:
+    #            for i in range(top, matrix.m):
+    #                #
+    #
+    #        return matrix
+    #
+    #    return alg(Matrix(*self.entries))
+
+def Matrix_identity(n):
+    rows = []
+
+    for i in range(n):
+        row = []
+        for j in range(n):
+            row.append(1 if i == j else 0)
+        rows.append(row)
+
+    return Matrix(*rows)
 
 def Matrix_mul(a, b):
     assert a.n == b.m

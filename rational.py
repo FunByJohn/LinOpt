@@ -1,8 +1,25 @@
+import re
+
 from math import gcd
 
 class Q:
 
     def __init__(self, p, q = 1):
+        if isinstance(p, Q):
+            inst = p
+            p = inst.p
+            q = inst.q
+        elif isinstance(p, str):
+            if '/' in p:
+                (p_str, q_str) = re.split('\s*/\s*', p)
+                p = int(p_str)
+                q = int(q_str)
+            else:
+                p = int(p)
+        elif not isinstance(p, int):
+            print('Error when initializing rational: unsupported type given as input')
+            assert False
+
         assert q != 0
 
         g = gcd(p, q)
@@ -23,6 +40,9 @@ class Q:
         return Q(self.q, self.p)
 
     def tostring(self):
+        if self.p == 0:
+            return '0'
+
         if self.q == 1:
             return str(self.p)
 
