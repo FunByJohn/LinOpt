@@ -28,10 +28,10 @@ class Q:
         self.q = q // g
 
     def __str__(self):
-        return self.tostring()
+        return self.to_string()
 
     def __repr__(self):
-        return self.tostring()
+        return self.to_string()
 
     def add_inv(self):
         return Q(-self.p, self.q)
@@ -39,7 +39,7 @@ class Q:
     def mul_inv(self):
         return Q(self.q, self.p)
 
-    def tostring(self):
+    def to_string(self):
         if self.p == 0:
             return '0'
 
@@ -47,6 +47,9 @@ class Q:
             return str(self.p)
 
         return f'{self.p}/{self.q}'
+
+    def is_nonzero(self):
+        return self.p != 0
 
 def Q_add(lhs, rhs):
     return Q(rhs.p * lhs.q + lhs.p * rhs.q, lhs.q * rhs.q)

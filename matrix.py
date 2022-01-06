@@ -56,18 +56,8 @@ class Matrix:
 
         return Matrix_mul(add, self)
 
-    #def rref(self):
-    #    def alg(matrix):
-    #        left = 0
-    #        top = 0
-    #
-    #        while left != matrix.n:
-    #            for i in range(top, matrix.m):
-    #                #
-    #
-    #        return matrix
-    #
-    #    return alg(Matrix(*self.entries))
+    def rref(self):
+        return Matrix_rref(Matrix(*self.entries))
 
 def Matrix_identity(n):
     rows = []
@@ -94,3 +84,33 @@ def Matrix_mul(a, b):
         rows.append(row)
 
     return Matrix(*rows)
+
+def Matrix_rref(matrix):
+    left = 0
+    top = 0
+    pivots = []
+    
+    while left < matrix.n and top < matrix.m:
+        nonzero_index = None
+        for i in range(top, matrix.m):
+            if matrix.at(i, left).is_nonzero():
+                nonzero_index = i
+        
+        if nonzero_index == None:
+            left += 1
+        else:
+            pivots.append((top, left))
+            matrix = matrix.swap_rows(top, nonzero_index)
+            matrix = matrix.scale_row(top, matrix.at(top, left).mul_inv())
+
+            for i in range(top + 1, matrix.m):
+                matrix = matrix.add_rows(i, top, matrix.at(i, left).add_inv())
+
+            left += 1
+            top += 1
+
+    for (pivot_i, pivot_j) in pivots:
+        for i in range(0, pivot_i):
+            matrix = matrix.add_rows(i, pivot_i, matrix.at(i, pivot_j).add_inv())
+    
+    return matrix
