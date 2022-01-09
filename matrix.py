@@ -43,7 +43,7 @@ class Matrix:
         return Matrix_mul(swap, self)
 
     def scale_row(self, i, scalar):
-        assert scalar.p != 0
+        assert scalar.is_nonzero()
 
         scale = Matrix_identity(self.m)
         scale.entries[i][i] = Q(scalar)
@@ -61,6 +61,8 @@ class Matrix:
 
     def inverse(self):
         assert self.m == self.n
+
+        # TODO: Check if the matrix was invertible
 
         return Matrix_rref(Matrix_combine_horizontal(self, Matrix_identity(self.n))) \
                .submatrix(self.n, 0, self.n, self.n)
@@ -113,6 +115,7 @@ def Matrix_rref(matrix):
         for i in range(top, matrix.m):
             if matrix.at(i, left).is_nonzero():
                 nonzero_index = i
+                break
         
         if nonzero_index == None:
             left += 1
@@ -147,3 +150,8 @@ def Matrix_combine_horizontal(a, b):
         rows.append(row)
 
     return Matrix(*rows)
+
+def Matrix_combine_vertical(a, b):
+    # I feel like a criminal for doing this
+    return Matrix_combine_horizontal(a.transpose(), b.transpose()).transpose()
+
