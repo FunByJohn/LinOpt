@@ -21,7 +21,7 @@ class LinearProgram:
 
         if comparison == '<=':
             print('add slack variable')
-        else:
+        elif comparison == '>=':
             print('add surplus variable')
 
         print([lhs, comparison, rhs])
