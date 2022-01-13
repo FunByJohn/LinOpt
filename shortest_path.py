@@ -3,8 +3,20 @@ import math
 from collections import deque
 from graph import *
 
+# These algorithms assume that the target vertex has no outgoing edges
+
 def bellman_ford(G, vertex_name, printTeX = True):
+    TeX = []
     n = G.vert_names.index(vertex_name)
+
+    def TeX_repr(n):
+        if n == math.inf:
+            return '\\infty'
+        return n
+
+    if printTeX:
+        TeX.append(f'\\begin{{itemize}}')
+        TeX.append(f'  \\item Algoritmen beskrevet i bogens 7.9 samt noten om Bellman-Ford følges.')
 
     # Set weights that are 0 to infinity to make the algorithm in the book work
     for i in range(len(G.vert_names)):
@@ -13,17 +25,29 @@ def bellman_ford(G, vertex_name, printTeX = True):
                 G.weight_matrix[i][j] = math.inf
 
     # p[i][j] is the book's p_i(j)
-    p = [[math.inf for i in range(len(G.vert_names))] for j in range(len(G.vert_names))]
+    p = [[math.inf for i in range(len(G.vert_names) + 1)] for j in range(len(G.vert_names))]
 
     # This is s^* from Kent's note on Bellman-Ford
     s = [None for i in range(len(G.vert_names))]
 
     # Set p_n(t) = 0 for all t
-    for t in range(len(G.vert_names)):
+    for t in range(len(G.vert_names) + 1):
         p[n][t] = 0
 
+    def print_state_step(t):
+        vector = []
+
+        for i in range(len(G.vert_names)):
+            vector.append(str(TeX_repr(p[i][t])))
+
+        TeX.append(f'  \\item $p^*({t}) = ({", ".join(vector)})^T$.')
+
+    print_state_step(0)
+
     # Iterate
-    for t in range(1, len(G.vert_names)):
+    for t in range(1, len(G.vert_names) + 1):
+        TeX_append = []
+        
         for i in range(len(G.vert_names)):
             if i != n:
                 value = math.inf
@@ -41,17 +65,52 @@ def bellman_ford(G, vertex_name, printTeX = True):
 
                 if p[i][t] != p[i][t-1]:
                     s[i] = through
+                    
+                    if printTeX:
+                        TeX_append.append(f'  \\item Vi sætter nu $s_{{{G.vert_names[i]}}}^* = {G.vert_names[through]}$.')
+
+        if printTeX:
+            print_state_step(t)
+
+            for line in TeX_append:
+                TeX.append(line)
+
+    # Check for negative cycle
+    has_negative_cycle = False
+    N = len(G.vert_names)
+
+    for i in range(N):
+        if (p[i][N] != p[i][N - 1]):
+            has_negative_cycle = True
+            break
 
     # Compute paths
     paths = [[] for i in range(len(G.vert_names))]
 
-    for i in range(len(G.vert_names)):
-        k = i
-        while (s[k] != None):
-            paths[i].append(G.vert_names[k])
-            k = s[k]
+    if not has_negative_cycle:
+        for i in range(len(G.vert_names)):
+            k = i
+            while (s[k] != None):
+                paths[i].append(G.vert_names[k])
+                k = s[k]
 
-        paths[i].append(G.vert_names[n])
+            paths[i].append(G.vert_names[n])
+
+    if printTeX:
+        if not has_negative_cycle:
+            for i in range(N):
+                path = paths[i]
+                split_str = " \\to "
+
+                if i != n:
+                    label = G.vert_names[i]
+                    TeX.append(f'  \\item Korteste vej fra ${G.vert_names[i]}$ til ${G.vert_names[n]}$ er ${split_str.join(path)}$ med længden ${p[i][len(G.vert_names)]}$.')
+        else:
+            TeX.append(f'  \\item Vi har at $p^*(n) \\ne p^*(n-1)$ hvormed der findes en cykel med negativ længde.')
+
+        TeX.append(f'\\end{{itemize}}')
+        
+        print('\n'.join(TeX))
 
     return paths
 
@@ -150,7 +209,15 @@ def dijkstra(G, vertex_name, printTeX = True):
 
 G = Graph(
     '1 2 3 4 5 6',
-    '(1, 2)=1, (1, 3)=1, (1, 4)=3, (2, 5)=4, (3, 2)=2, (3, 4)=4, (3, 5)=5, (4, 6)=9, (5, 4)=1, (5, 6)=6',
+    '(1, 2)=1, (1, 3)=1, (1, 4)=3, (2, 5)=4, (3, 2)=2, ' + \
+    '(3, 4)=4, (3, 5)=5, (4, 6)=9, (5, 4)=1, (5, 6)=6'
 )
 
-dijkstra(G, '6', True)
+dijkstra(G, '6')
+
+#G = Graph(
+#    'A B C D E F',
+#    '(A, B)=1, (B,D)=-3, (D,C)=-3, (C,B)=-3, (B,E)=1, (D,E)=2, (E,F)=1'
+#)
+#
+#bellman_ford(G, 'F')

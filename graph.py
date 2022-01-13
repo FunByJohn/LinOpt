@@ -8,7 +8,7 @@ class Graph:
         self.edge_pairs = []
         self.edge_weights = []
         
-        edges = re.findall(r'\(\s*(\w+)\s*,\s*(\w+)\s*\)\s*=\s*(\d+)', edges_string)
+        edges = re.findall(r'\(\s*(\w+)\s*,\s*(\w+)\s*\)\s*=\s*([-]{0,1}\s*\d+)', edges_string)
 
         for (src, dst, weight) in edges:
             src = self.vert_names.index(src)
