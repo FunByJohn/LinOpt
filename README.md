@@ -1,2 +1,2 @@
 # LinOpt
-Linear optimization algorithms for making the exam easier to do
+This code implements algorithms as described in the book D. Bertsimas and J.N. Tsitsiklis: "Introduction to Linear Optimization", Athhena Scientific and Dynamic Ideas, LLC, 1997.

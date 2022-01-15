@@ -45,15 +45,30 @@ class Q:
 
     def to_string(self):
         if self.p == 0:
+            return 'Q(0)'
+
+        if self.q == 1:
+            return f'Q({str(self.p)})'
+
+        return f'Q({self.p}/{self.q})'
+
+    def to_TeX(self):
+        if self.p == 0:
             return '0'
 
         if self.q == 1:
             return str(self.p)
 
-        return f'{self.p}/{self.q}'
+        return f'{"-" if self.is_negative() else ""}\\tfrac{{{abs(self.p)}}}{{{self.q}}}'
+
+    def is_one(self):
+        return self.p == 1 and self.q == 1
 
     def is_nonzero(self):
         return self.p != 0
+
+    def is_negative(self):
+        return self.p < 0
 
 def Q_add(lhs, rhs):
     return Q(rhs.p * lhs.q + lhs.p * rhs.q, lhs.q * rhs.q)
