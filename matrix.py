@@ -62,10 +62,13 @@ class Matrix:
     def inverse(self):
         assert self.m == self.n
 
-        # TODO: Check if the matrix was invertible
+        rref_form = Matrix_rref(Matrix_combine_horizontal(self, Matrix_identity(self.n)))
+        maybe_identity = rref_form.submatrix(0, 0, self.n, self.n)
 
-        return Matrix_rref(Matrix_combine_horizontal(self, Matrix_identity(self.n))) \
-               .submatrix(self.n, 0, self.n, self.n)
+        # ensure matrix actually was invertible
+        assert Matrix_equals(maybe_identity, Matrix_identity(self.n))
+
+        return rref_form.submatrix(self.n, 0, self.n, self.n)
 
     def submatrix(self, left, top, width, height):
         rows = []
@@ -78,7 +81,6 @@ class Matrix:
 
         return Matrix(*rows)
 
-
 def Matrix_identity(n):
     rows = []
 
@@ -86,6 +88,40 @@ def Matrix_identity(n):
         row = []
         for j in range(n):
             row.append(1 if i == j else 0)
+        rows.append(row)
+
+    return Matrix(*rows)
+
+def Matrix_equals(lhs, rhs):
+    assert lhs.m == rhs.m and lhs.n == rhs.n
+
+    for i in range(lhs.m):
+        for j in range(lhs.n):
+            if not Q_equals(lhs.at(i, j), rhs.at(i, j)):
+                return False
+
+    return True
+
+def Matrix_add(a, b):
+    assert a.n == b.n and a.m == b.m
+
+    rows = []
+    for i in range(a.m):
+        row = []
+        for j in range(a.n):
+            row.append(Q_add(a.at(i, j), b.at(i, j)))
+        rows.append(row)
+
+    return Matrix(*rows)
+
+def Matrix_sub(a, b):
+    assert a.n == b.n and a.m == b.m
+
+    rows = []
+    for i in range(a.m):
+        row = []
+        for j in range(a.n):
+            row.append(Q_sub(a.at(i, j), b.at(i, j)))
         rows.append(row)
 
     return Matrix(*rows)
@@ -154,4 +190,3 @@ def Matrix_combine_horizontal(a, b):
 def Matrix_combine_vertical(a, b):
     # I feel like a criminal for doing this
     return Matrix_combine_horizontal(a.transpose(), b.transpose()).transpose()
-

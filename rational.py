@@ -81,3 +81,6 @@ def Q_mul(lhs, rhs):
 
 def Q_div(lhs, rhs):
     return Q_mul(lhs, rhs.mul_inv())
+
+def Q_equals(lhs, rhs):
+    return lhs.p == rhs.p and lhs.q == rhs.q

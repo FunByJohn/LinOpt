@@ -187,4 +187,3 @@ LP.add_constraint('      2 x_1 +   x_2 +   x_3  >= 2 ')
 #LP.add_constraint('                        x_3  >= 0 ')
 
 LP_standard = LP.get_standard_form()
-print(LP_standard.get_TeX())
