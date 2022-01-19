@@ -70,6 +70,9 @@ class Q:
     def is_negative(self):
         return self.p < 0
 
+    def is_positive(self):
+        return self.p > 0
+
 def Q_add(lhs, rhs):
     return Q(rhs.p * lhs.q + lhs.p * rhs.q, lhs.q * rhs.q)
 
@@ -84,3 +87,6 @@ def Q_div(lhs, rhs):
 
 def Q_equals(lhs, rhs):
     return lhs.p == rhs.p and lhs.q == rhs.q
+
+def Q_leq(lhs, rhs):
+    return Q_equals(lhs, rhs) or lhs.p * rhs.q < rhs.p * lhs.q
