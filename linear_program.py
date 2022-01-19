@@ -1,5 +1,6 @@
 from enum import Enum, auto
 from rational import *
+from matrix import *
 
 import re
 import copy
@@ -21,19 +22,25 @@ class LinearProgram:
         self.variable_names = []
         self.constraints = []
         self.standard_form = True
+        self.is_dual = False
 
     def set_objective(self, string):
         (min_max, lin_comb) = string.lstrip().rstrip().split(' ', maxsplit = 1)
 
-        if min_max == 'min':
-            self.min_or_max = MinOrMax.MIN
-        elif min_max == 'max':
-            self.min_or_max = MinOrMax.MAX
-        else:
+        self.min_or_max = MinOrMax.MIN
+        self.objective = self.parse_linear_combination(lin_comb)
+
+        if min_max == 'max':
+            # We flip signs in objective so it becomes min instead, since set_objective will only be used on primal problems
+            new_objective = []
+
+            for (coef, variable) in self.objective:
+                new_objective.append((coef.add_inv(), variable))
+
+            self.objective = new_objective
+        elif min_max != 'min':
             print('Error when initializing LinearProgram: "min" or "max" not supplied in objective function')
             assert False
-
-        self.objective = self.parse_linear_combination(lin_comb)
 
     def add_constraint(self, string):
         comparisonStr = re.search(r'([<>]{0,1}=)', string).group(1)
@@ -88,9 +95,28 @@ class LinearProgram:
     def is_feasible(self, vector):
         assert len(vector) == len(self.variable_names)
 
+        if self.is_dual == False:
+            for value in vector:
+                if value.is_negative():
+                    return False
 
+        for (lhs, comparison, rhs) in self.constraints:
+            lhs_value = Q(0)
 
-        pass
+            for (coef, variable) in lhs:
+                lhs_value = Q_add(lhs_value, Q_mul(coef, vector[self.variable_names.index(variable)]))
+
+            if comparison == ComparisonOperator.EQUAL:
+                if not Q_equals(lhs_value, rhs):
+                    return False
+            elif comparison == ComparisonOperator.LESS_EQUAL:
+                if not Q_leq(lhs_value, rhs):
+                    return False
+            elif comparison == ComparisonOperator.GREATER_EQUAL:
+                if not Q_geq(lhs_value, rhs):
+                    return False
+
+        return True
 
     def add_artificial_variables(self):
         self.standard_form = True
@@ -167,14 +193,58 @@ class LinearProgram:
 
             TeX.append(f'    {TeXify_linear_combination(lhs)} &{cmp_str} {rhs.to_TeX()}, \\\\')
 
-        TeX.append(f'    {", ".join(self.variable_names)} &\\geq 0.')        
+        if not self.is_dual:
+            TeX.append(f'    {", ".join(self.variable_names)} &\\geq 0.')        
+        
         TeX.append(f'  \\end{{align*}}')
         TeX.append(f'\\end{{quote}}')
 
         return '\n'.join(TeX)
 
     def get_dual(self):
-        pass
+        if not self.standard_form:
+            return self.get_standard_form().get_dual()
+
+        dual = LinearProgram()
+        dual.is_dual = True
+        dual.min_or_max = MinOrMax.MAX
+        dual.variable_names = ['p_' + str(i + 1) for i in range(len(self.constraints))]
+
+        objective = []
+        constraints = []
+        rows = []
+        
+        for i, (lhs, comparison, rhs) in enumerate(self.constraints):
+            objective.append((Q(rhs), dual.variable_names[i]))
+
+            row = [Q(0) for i in range(len(self.variable_names))]
+
+            for (coef, variable) in lhs:
+                row[self.variable_names.index(variable)] = coef
+
+            rows.append(row)
+
+        A_T = Matrix(*rows).transpose()
+        c = [Q(0) for i in range(A_T.m)]
+
+        for (coef, variable) in self.objective:
+            c[self.variable_names.index(variable)] = coef
+
+        for i in range(A_T.m):
+            lhs = []
+            comparison = ComparisonOperator.LESS_EQUAL
+            rhs = c[i]
+
+            for j in range(A_T.n):
+                if A_T.at(i, j).is_nonzero():
+                    lhs.append((A_T.at(i, j), dual.variable_names[j]))
+
+            constraints.append((lhs, comparison, rhs))
+
+        dual.objective = objective
+        dual.constraints = constraints
+
+        return dual
 
 
 LP = LinearProgram()
@@ -187,3 +257,7 @@ LP.add_constraint('      2 x_1 +   x_2 +   x_3  >= 2 ')
 #LP.add_constraint('                        x_3  >= 0 ')
 
 LP_standard = LP.get_standard_form()
+
+LP_dual = LP.get_dual()
+
+print(LP_dual.get_TeX())

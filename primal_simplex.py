@@ -52,24 +52,6 @@ def primal_simplex(LP, initial_basis, printTeX = True):
         return Matrix(*[coefs]).transpose()
 
     def get_tableau_TeX(tableau):
-        '''
-        Example:
-
-        \bgroup
-        \def\arraystretch{1.5}
-        \begin{table}[H]
-            \begin{tabular}{r|r|rrrrrr|}
-            \cline{2-8}
-                    &       & $x_1$  & $x_2$  & $x_3$  & $x_4$  & $x_5$  & $x_6$  \\ \cline{2-8} 
-                    & $-10$ & $0$    & $1$    & $-4$   & $-2$   & $0$    & $0$    \\ \cline{2-8} 
-            $x_1 =$ & $5$   & $1$    & $0$    & $3$    & $1$    & $0$    & $0$    \\
-            $x_5 =$ & $3$   & $0$    & $2$    & $1$    & $0$    & $1$    & $0$    \\
-            $x_6 =$ & $8$   & $0$    & $-1$   & $5$*   & $2$    & $0$    & $1$    \\ \cline{2-8}
-            \end{tabular}
-        \end{table}
-        \egroup
-        '''
-
         TeX = []
         TeX.append(f'\\bgroup')
         TeX.append(f'\\def\\arraystretch{{1.5}}')
@@ -111,7 +93,20 @@ def primal_simplex(LP, initial_basis, printTeX = True):
     bot_right = Matrix_mul(B_inv, A)
     tableau = Matrix_combine_vertical(Matrix_combine_horizontal(top_left, top_right), Matrix_combine_horizontal(bot_left, bot_right))
 
-    print(get_tableau_TeX(tableau))
+    def current_solution():
+        solution = [Q(0) for i in range(len(LP.variable_names))]
+
+        for i in range(len(current_basis)):
+            solution[current_basis[i]] = tableau.at(i + 1, 0)
+
+        return solution
+
+    if not LP.is_feasible(current_solution()):
+        print("WARNING! Initial solution is not feasible")
+        assert False
+
+    if printTeX:
+        print(get_tableau_TeX(tableau))
 
     # Now we follow the algorithm as described on p. 100
     # Step 1 has been performed in the code above
@@ -166,10 +161,23 @@ def primal_simplex(LP, initial_basis, printTeX = True):
             if i != l + 1:
                 tableau = tableau.add_rows(i, l + 1, tableau.at(i, j + 1).add_inv())
 
-    solution = [Q(0) for i in range(len(LP.variable_names))]
+        if printTeX:
+            print(get_tableau_TeX(tableau))
 
-    for i in range(len(current_basis)):
-        solution[current_basis[i]] = tableau.at(i + 1, 0)
+    solution = current_solution()
+
+    if printTeX:
+        print('Optimal solution is')
+        print('\\[')
+
+        variables = ', '.join(LP.variable_names)
+        values = ', '.join([value.to_TeX() for value in solution])
+        print(f'  ({variables}) = ({values})')
+        print('\\]')
+
+    if not LP.is_feasible(solution):
+        print("WARNING! Found solution is not feasible")
+        assert False
 
     return solution
 

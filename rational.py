@@ -90,3 +90,6 @@ def Q_equals(lhs, rhs):
 
 def Q_leq(lhs, rhs):
     return Q_equals(lhs, rhs) or lhs.p * rhs.q < rhs.p * lhs.q
+
+def Q_geq(lhs, rhs):
+    return Q_equals(lhs, rhs) or lhs.p * rhs.q > rhs.p * lhs.q
