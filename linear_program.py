@@ -252,12 +252,10 @@ LP.set_objective('  min  2 x_1   + x_2 + 2 x_3')
 LP.add_constraint('        x_1         + 3 x_3  <= 5 ')
 LP.add_constraint('              2 x_2 +   x_3  <= 3 ')
 LP.add_constraint('      2 x_1 +   x_2 +   x_3  >= 2 ')
-#LP.add_constraint('        x_1                  >= 0 ')
-#LP.add_constraint('                x_2          >= 0 ') # TODO: How to handle x_1, x_2, x_3 >= 0 constraint?
-#LP.add_constraint('                        x_3  >= 0 ')
 
 LP_standard = LP.get_standard_form()
 
 LP_dual = LP.get_dual()
 
 print(LP_dual.get_TeX())
+print(LP_dual.is_feasible([Q(0), Q(0), Q(1)]))
