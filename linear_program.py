@@ -5,6 +5,27 @@ from matrix import *
 import re
 import copy
 
+def TeXify_linear_combination(lin_comb):
+    string = ''
+
+    for i in range(len(lin_comb)):
+        (coef, variable) = lin_comb[i]
+
+        if coef.is_one():
+            coef_str = ''
+        elif Q_mul(coef, Q(-1)).is_one():
+            coef_str = '-'
+        else:
+            coef_str = coef.to_TeX()
+
+        if i > 0:
+            if not coef.is_negative():
+                string += '+'
+
+        string += coef_str + variable
+
+    return string
+
 class MinOrMax(Enum):
     MIN = auto()
     MAX = auto()
@@ -43,20 +64,23 @@ class LinearProgram:
             assert False
 
     def add_constraint(self, string):
-        comparisonStr = re.search(r'([<>]{0,1}=)', string).group(1)
-        (lhs, rhs) = re.split(r'\s*[<>]{0,1}=\s*', string)
-        lhs = self.parse_linear_combination(lhs)
-        rhs = Q(rhs)
+        if isinstance(string, str):
+            comparisonStr = re.search(r'([<>]{0,1}=)', string).group(1)
+            (lhs, rhs) = re.split(r'\s*[<>]{0,1}=\s*', string)
+            lhs = self.parse_linear_combination(lhs)
+            rhs = Q(rhs)
 
-        if comparisonStr == '=':
-            comparison = ComparisonOperator.EQUAL
+            if comparisonStr == '=':
+                comparison = ComparisonOperator.EQUAL
+            else:
+                self.standard_form = False
+                
+                if comparisonStr == '<=':
+                    comparison = ComparisonOperator.LESS_EQUAL
+                elif comparisonStr == '>=':
+                    comparison = ComparisonOperator.GREATER_EQUAL
         else:
-            self.standard_form = False
-            
-            if comparisonStr == '<=':
-                comparison = ComparisonOperator.LESS_EQUAL
-            elif comparisonStr == '>=':
-                comparison = ComparisonOperator.GREATER_EQUAL
+            (lhs, comparison, rhs) = string
 
         for (coef, variable) in lhs:
             self.ensure_variable_exists(variable)
@@ -147,28 +171,6 @@ class LinearProgram:
         return new_LP
 
     def get_TeX(self):
-        
-        def TeXify_linear_combination(lin_comb):
-            string = ''
-
-            for i in range(len(lin_comb)):
-                (coef, variable) = lin_comb[i]
-
-                if coef.is_one():
-                    coef_str = ''
-                elif Q_mul(coef, Q(-1)).is_one():
-                    coef_str = '-'
-                else:
-                    coef_str = coef.to_TeX()
-
-                if i > 0:
-                    if not coef.is_negative():
-                        string += '+'
-
-                string += coef_str + variable
-
-            return string
-
         TeX = []
         TeX.append(f'\\begin{{quote}}')
 
@@ -247,15 +249,15 @@ class LinearProgram:
         return dual
 
 
-LP = LinearProgram()
-LP.set_objective('  min  2 x_1   + x_2 + 2 x_3')
-LP.add_constraint('        x_1         + 3 x_3  <= 5 ')
-LP.add_constraint('              2 x_2 +   x_3  <= 3 ')
-LP.add_constraint('      2 x_1 +   x_2 +   x_3  >= 2 ')
-
-LP_standard = LP.get_standard_form()
-
-LP_dual = LP.get_dual()
-
-print(LP_dual.get_TeX())
-print(LP_dual.is_feasible([Q(0), Q(0), Q(1)]))
+# LP = LinearProgram()
+# LP.set_objective('  min  2 x_1   + x_2 + 2 x_3')
+# LP.add_constraint('        x_1         + 3 x_3  <= 5 ')
+# LP.add_constraint('              2 x_2 +   x_3  <= 3 ')
+# LP.add_constraint('      2 x_1 +   x_2 +   x_3  >= 2 ')
+# 
+# LP_standard = LP.get_standard_form()
+# 
+# LP_dual = LP.get_dual()
+# 
+# print(LP_dual.get_TeX())
+# print(LP_dual.is_feasible([Q(0), Q(0), Q(1)]))

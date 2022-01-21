@@ -8,7 +8,7 @@ class SimplexAlg(Enum):
     PRIMAL = auto()
     DUAL = auto()
 
-def simplex(LP, initial_basis, alg = SimplexAlg.PRIMAL, printTeX = True):
+def simplex(LP, initial_basis, alg, printTeX = True):
     assert LP.standard_form == True
 
     if isinstance(initial_basis, str):
@@ -112,6 +112,10 @@ def simplex(LP, initial_basis, alg = SimplexAlg.PRIMAL, printTeX = True):
     if printTeX:
         print(get_tableau_TeX(tableau))
 
+    #print('===============')
+    #print(Matrix_rref(A.transpose()).transpose())
+    #print('===============')
+
     if alg == SimplexAlg.PRIMAL:
         # Now we follow the algorithm as described on p. 100
         
@@ -200,7 +204,7 @@ def simplex(LP, initial_basis, alg = SimplexAlg.PRIMAL, printTeX = True):
             is_optimal = True
 
             for i in range(1, tableau.n):
-                if tableau.at(l, i).is_negative():
+                if tableau.at(l + 1, i).is_negative():
                     is_optimal = False
                     break
 
@@ -213,8 +217,8 @@ def simplex(LP, initial_basis, alg = SimplexAlg.PRIMAL, printTeX = True):
             smallest_ratio = math.inf
 
             for i in range(1, tableau.n):
-                if tableau.at(l, i).is_negative():
-                    ratio = Q_div(Q_abs(tableau.at(0, i)), tableau.at(l, i))
+                if tableau.at(l + 1, i).is_negative():
+                    ratio = Q_div(tableau.at(0, i), Q_abs(tableau.at(l + 1, i)))
 
                     if j == math.inf or Q_leq(ratio, smallest_ratio):
                         j = i - 1
@@ -250,26 +254,26 @@ def simplex(LP, initial_basis, alg = SimplexAlg.PRIMAL, printTeX = True):
         print("WARNING! Found solution is not feasible")
         assert False
 
-    return solution, current_basis
+    return solution, current_basis, tableau
 
-LP = LinearProgram()
-LP.set_objective('  min  2 x_1   + x_2 + 2 x_3')
-LP.add_constraint('        x_1         + 3 x_3  <= 5 ')
-LP.add_constraint('              2 x_2 +   x_3  <= 3 ')
-LP.add_constraint('      2 x_1 +   x_2 +   x_3  >= 2 ')
-
-LP_standard = LP.get_standard_form()
-sol, basis = simplex(LP_standard, 'x_1 x_5 x_6', SimplexAlg.PRIMAL)
-
-new_LP = LinearProgram()
-new_LP.set_objective('  min  2 x_1   + x_2 + 2 x_3')
-new_LP.add_constraint('        x_1         + 3 x_3  <= 5 ')
-new_LP.add_constraint('              2 x_2 +   x_3  <= 3 ')
-new_LP.add_constraint('      2 x_1 +   x_2 +   x_3  >= 2 ')
-new_LP.add_constraint('        x_1 +   x_2 +   x_3  >= 2 ')
-
-LP_standard = new_LP.get_standard_form()
-sol, basis = simplex(LP_standard, 'x_1 x_5 x_4 x_7', SimplexAlg.DUAL)
-
-print(sol)
-print(basis)
+# LP = LinearProgram()
+# LP.set_objective('  min  2 x_1   + x_2 + 2 x_3')
+# LP.add_constraint('        x_1         + 3 x_3  <= 5 ')
+# LP.add_constraint('              2 x_2 +   x_3  <= 3 ')
+# LP.add_constraint('      2 x_1 +   x_2 +   x_3  >= 2 ')
+# 
+# LP_standard = LP.get_standard_form()
+# sol, basis = simplex(LP_standard, 'x_1 x_5 x_6', SimplexAlg.PRIMAL)
+# 
+# new_LP = LinearProgram()
+# new_LP.set_objective('  min  2 x_1   + x_2 + 2 x_3')
+# new_LP.add_constraint('        x_1         + 3 x_3  <= 5 ')
+# new_LP.add_constraint('              2 x_2 +   x_3  <= 3 ')
+# new_LP.add_constraint('      2 x_1 +   x_2 +   x_3  >= 2 ')
+# new_LP.add_constraint('        x_1 +   x_2 +   x_3  >= 2 ')
+# 
+# LP_standard = new_LP.get_standard_form()
+# sol, basis = simplex(LP_standard, 'x_1 x_5 x_4 x_7', SimplexAlg.DUAL)
+# 
+# print(sol)
+# print(basis)

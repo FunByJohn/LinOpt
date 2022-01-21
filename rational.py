@@ -73,6 +73,9 @@ class Q:
     def is_positive(self):
         return self.p > 0
 
+    def is_integer(self):
+        return self.q == 1
+
 def Q_add(lhs, rhs):
     return Q(rhs.p * lhs.q + lhs.p * rhs.q, lhs.q * rhs.q)
 
@@ -88,11 +91,23 @@ def Q_div(lhs, rhs):
 def Q_equals(lhs, rhs):
     return lhs.p == rhs.p and lhs.q == rhs.q
 
+def Q_le(lhs, rhs):
+    return lhs.p * rhs.q < rhs.p * lhs.q
+
+def Q_ge(lhs, rhs):
+    return lhs.p * rhs.q > rhs.p * lhs.q
+
 def Q_leq(lhs, rhs):
-    return Q_equals(lhs, rhs) or lhs.p * rhs.q < rhs.p * lhs.q
+    return Q_equals(lhs, rhs) or Q_le(lhs, rhs)
 
 def Q_geq(lhs, rhs):
-    return Q_equals(lhs, rhs) or lhs.p * rhs.q > rhs.p * lhs.q
+    return Q_equals(lhs, rhs) or Q_ge(lhs, rhs)
 
 def Q_abs(x):
     return Q(-x.p, x.q) if x.p < 0 else Q(x)
+
+def Q_floor(x):
+    if x.is_negative():
+        return Q_sub(Q_floor(x.add_inv()).add_inv(), Q(1))
+    
+    return Q(x.p // x.q)
