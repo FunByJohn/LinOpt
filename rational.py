@@ -61,6 +61,9 @@ class Q:
 
         return f'{"-" if self.is_negative() else ""}\\tfrac{{{abs(self.p)}}}{{{self.q}}}'
 
+    def is_zero(self):
+        return self.p == 0
+
     def is_one(self):
         return self.p == 1 and self.q == 1
 

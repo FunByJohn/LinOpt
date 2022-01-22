@@ -1,5 +1,6 @@
 import random
 
+from linear_program import *
 from simplex import *
 
 class IntegerProgram(LinearProgram):
@@ -18,6 +19,7 @@ class IntegerProgram(LinearProgram):
 
         return True
 
+# Bug: Sometimes it breaks the dual algorithm, just run it again and it might work
 def randomized_gomory(IP, printTeX = True):
     iterations = 0
 
@@ -25,7 +27,13 @@ def randomized_gomory(IP, printTeX = True):
     relaxedLP = IP.get_standard_form()
 
     # Solve relaxed LP form of IP   (TODO: Make this more general)
-    sol, basis, tableau = simplex(relaxedLP, [0, 1], SimplexAlg.PRIMAL, printTeX = printTeX)
+    initial_basis = find_initial_basic_solution(relaxedLP, printTeX = printTeX)
+
+    if initial_basis == None:
+        print("Error in Randomized Gomory: Couldn't find initial basic feasible solution to relaxed LP!")
+        return None
+
+    sol, basis, tableau = simplex(relaxedLP, initial_basis, SimplexAlg.PRIMAL, printTeX = printTeX)
     orig_sol = sol[0:len(IP.variable_names)]
 
     while not IP.is_integer_feasible(orig_sol):
@@ -72,12 +80,5 @@ def randomized_gomory(IP, printTeX = True):
 #IP.set_objective('min x_1 - 2x_2')
 #IP.add_constraint('-4x_1 + 6x_2 <= 9')
 #IP.add_constraint('x_1 + x_2 <= 4')
-
+#
 #print(randomized_gomory(IP, True))
-
-IP = IntegerProgram()
-IP.set_objective('min x_2 + x_3')
-IP.add_constraint('x_1 + x_2 + x_3 >= 4')
-IP.add_constraint('4x_1 + 2x_2 + x_3 <= 12')
-
-print(randomized_gomory(IP, True))

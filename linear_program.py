@@ -1,6 +1,7 @@
 from enum import Enum, auto
 from rational import *
 from matrix import *
+from simplex import *
 
 import re
 import copy
@@ -142,24 +143,25 @@ class LinearProgram:
 
         return True
 
+    def get_new_variable_name(self):
+        last_variable_index = int(self.variable_names[-1].split('_')[1])
+        new_variable = f'x_{last_variable_index + 1}'
+        self.ensure_variable_exists(new_variable)
+        return new_variable
+
+    # slack and surplus
     def add_artificial_variables(self):
         self.standard_form = True
-
-        def get_new_variable_name():
-            last_variable_index = int(self.variable_names[-1].split('_')[1])
-            new_variable = f'x_{last_variable_index + 1}'
-            self.ensure_variable_exists(new_variable)
-            return new_variable
 
         for i in range(len(self.constraints)):
             (lhs, comparison, rhs) = self.constraints[i]
 
             if comparison == ComparisonOperator.LESS_EQUAL:
                 # add slack variable
-                lhs.append((Q(1), get_new_variable_name()))
+                lhs.append((Q(1), self.get_new_variable_name()))
             elif comparison == ComparisonOperator.GREATER_EQUAL:
                 # add surplus variable
-                lhs.append((Q(-1), get_new_variable_name()))
+                lhs.append((Q(-1), self.get_new_variable_name()))
 
             comparison = ComparisonOperator.EQUAL
 
@@ -248,16 +250,7 @@ class LinearProgram:
 
         return dual
 
-
-# LP = LinearProgram()
-# LP.set_objective('  min  2 x_1   + x_2 + 2 x_3')
-# LP.add_constraint('        x_1         + 3 x_3  <= 5 ')
-# LP.add_constraint('              2 x_2 +   x_3  <= 3 ')
-# LP.add_constraint('      2 x_1 +   x_2 +   x_3  >= 2 ')
-# 
-# LP_standard = LP.get_standard_form()
-# 
-# LP_dual = LP.get_dual()
-# 
-# print(LP_dual.get_TeX())
-# print(LP_dual.is_feasible([Q(0), Q(0), Q(1)]))
+    def solve(self, printTeX = True):
+        LP_standard = self.get_standard_form()
+        initial_basis = find_initial_basic_solution(LP_standard, printTeX = printTeX)
+        return simplex(LP_standard, initial_basis, SimplexAlg.PRIMAL, printTeX = printTeX)
