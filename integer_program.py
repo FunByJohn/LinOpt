@@ -25,8 +25,6 @@ def randomized_gomory(IP, printTeX = True):
 
     # Algorithm on p. 482 in the book
     relaxedLP = IP.get_standard_form()
-
-    # Solve relaxed LP form of IP   (TODO: Make this more general)
     initial_basis = find_initial_basic_solution(relaxedLP, printTeX = printTeX)
 
     if initial_basis == None:
@@ -75,10 +73,3 @@ def randomized_gomory(IP, printTeX = True):
         print(f'Randomized Gomory used {iterations} iterations this time!')
 
     return orig_sol
-
-#IP = IntegerProgram()
-#IP.set_objective('min x_1 - 2x_2')
-#IP.add_constraint('-4x_1 + 6x_2 <= 9')
-#IP.add_constraint('x_1 + x_2 <= 4')
-#
-#print(randomized_gomory(IP, True))

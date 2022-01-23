@@ -4,10 +4,17 @@ class Graph:
 
     def __init__(self, verts_string, edges_string):
         self.directed = True
-        self.vert_names = re.split(r'[\s,]+', verts_string.lstrip().rstrip())
         self.edge_pairs = []
         self.edge_weights = []
-        
+
+        self.setup_verts(verts_string)
+        self.setup_edges(edges_string)
+        self.setup_matrices()
+
+    def setup_verts(self, verts_string):
+        self.vert_names = re.split(r'[\s,]+', verts_string.lstrip().rstrip())
+
+    def setup_edges(self, edges_string):
         edges = re.findall(r'\(\s*(\w+)\s*,\s*(\w+)\s*\)\s*=\s*([-]{0,1}\s*\d+)', edges_string)
 
         for (src, dst, weight) in edges:
@@ -17,8 +24,6 @@ class Graph:
             
             self.edge_pairs.append((src, dst))
             self.edge_weights.append((src, dst, weight))
-
-        self.setup_matrices()
 
     def setup_matrices(self):
         def adj_matrix_entry(i, j):

@@ -61,6 +61,10 @@ class Q:
 
         return f'{"-" if self.is_negative() else ""}\\tfrac{{{abs(self.p)}}}{{{self.q}}}'
 
+    def to_int(self):
+        assert self.q == 1
+        return self.p
+
     def is_zero(self):
         return self.p == 0
 
@@ -114,3 +118,4 @@ def Q_floor(x):
         return Q_sub(Q_floor(x.add_inv()).add_inv(), Q(1))
     
     return Q(x.p // x.q)
+    
