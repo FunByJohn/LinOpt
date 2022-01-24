@@ -1,0 +1,435 @@
+\documentclass{article}
+
+\usepackage{import}
+\import{/Users/Johannes/Documents/TeX/}{preamble.tex}
+\usepackage{amsthm}
+\usepackage{float}
+%\usepackage[margin=0.8in]{geometry}
+\theoremstyle{definition}
+\newtheorem{prop}{Proposition}
+
+\title{Linear optimization: Mandatory exercise}
+\author{Johannes Jensen, 201505594@post.au.dk}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Opg 1}
+\subsection*{(a)}
+\begin{quote}
+  Maximize $5p_1+5p_2+8p_3$ \\
+  s.t.
+  \begin{align*}
+    p_1+2p_2+p_3 &\leq -2, \\
+    p_1+p_2+2p_3 &\leq -3, \\
+    p_1+2p_2+2p_3 &\leq -4, \\
+    -p_2 &\leq 0, \\
+    p_3 &\leq 0, \\
+  \end{align*}
+\end{quote}
+
+\subsection*{(b)}
+First we set up the auxillary linear program
+\begin{quote}
+  Minimize $x_6+x_7+x_8$ \\
+  s.t.
+  \begin{align*}
+    x_1+x_2+x_3+x_6 &= 5, \\
+    2x_1+x_2+2x_3-x_4+x_7 &= 5, \\
+    x_1+2x_2+2x_3+x_5+x_8 &= 8, \\
+    x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_8 &\geq 0.
+  \end{align*}
+\end{quote}
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrrrr|}
+  \cline{2-10}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ & $x_7$ & $x_8$ \\ \cline{2-10}
+    & $-18$ & $-4$ & $-4$ & $-5$ & $1$ & $-1$ & $0$ & $0$ & $0$ \\ \cline{2-10}
+  $x_6 = $ & $5$ & $1$ & $1$ & $1$ & $0$ & $0$ & $1$ & $0$ & $0$ \\ 
+  $x_7 = $ & $5$ & $2$ & $1$ & $2$ & $-1$ & $0$ & $0$ & $1$ & $0$ \\ 
+  $x_8 = $ & $8$ & $1$ & $2$ & $2$ & $0$ & $1$ & $0$ & $0$ & $1$ \\ \cline{2-10}
+  \end{tabular}
+\end{table}
+\egroup
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrrrr|}
+  \cline{2-10}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ & $x_7$ & $x_8$ \\ \cline{2-10}
+    & $-8$ & $0$ & $-2$ & $-1$ & $-1$ & $-1$ & $0$ & $2$ & $0$ \\ \cline{2-10}
+  $x_6 = $ & $\tfrac{5}{2}$ & $0$ & $\tfrac{1}{2}$ & $0$ & $\tfrac{1}{2}$ & $0$ & $1$ & $-\tfrac{1}{2}$ & $0$ \\ 
+  $x_1 = $ & $\tfrac{5}{2}$ & $1$ & $\tfrac{1}{2}$ & $1$ & $-\tfrac{1}{2}$ & $0$ & $0$ & $\tfrac{1}{2}$ & $0$ \\ 
+  $x_8 = $ & $\tfrac{11}{2}$ & $0$ & $\tfrac{3}{2}$ & $1$ & $\tfrac{1}{2}$ & $1$ & $0$ & $-\tfrac{1}{2}$ & $1$ \\ \cline{2-10}
+  \end{tabular}
+\end{table}
+\egroup
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrrrr|}
+  \cline{2-10}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ & $x_7$ & $x_8$ \\ \cline{2-10}
+    & $-\tfrac{2}{3}$ & $0$ & $0$ & $\tfrac{1}{3}$ & $-\tfrac{1}{3}$ & $\tfrac{1}{3}$ & $0$ & $\tfrac{4}{3}$ & $\tfrac{4}{3}$ \\ \cline{2-10}
+  $x_6 = $ & $\tfrac{2}{3}$ & $0$ & $0$ & $-\tfrac{1}{3}$ & $\tfrac{1}{3}$ & $-\tfrac{1}{3}$ & $1$ & $-\tfrac{1}{3}$ & $-\tfrac{1}{3}$ \\ 
+  $x_1 = $ & $\tfrac{2}{3}$ & $1$ & $0$ & $\tfrac{2}{3}$ & $-\tfrac{2}{3}$ & $-\tfrac{1}{3}$ & $0$ & $\tfrac{2}{3}$ & $-\tfrac{1}{3}$ \\ 
+  $x_2 = $ & $\tfrac{11}{3}$ & $0$ & $1$ & $\tfrac{2}{3}$ & $\tfrac{1}{3}$ & $\tfrac{2}{3}$ & $0$ & $-\tfrac{1}{3}$ & $\tfrac{2}{3}$ \\ \cline{2-10}
+  \end{tabular}
+\end{table}
+\egroup
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrrrr|}
+  \cline{2-10}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ & $x_7$ & $x_8$ \\ \cline{2-10}
+    & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $1$ & $1$ & $1$ \\ \cline{2-10}
+  $x_4 = $ & $2$ & $0$ & $0$ & $-1$ & $1$ & $-1$ & $3$ & $-1$ & $-1$ \\ 
+  $x_1 = $ & $2$ & $1$ & $0$ & $0$ & $0$ & $-1$ & $2$ & $0$ & $-1$ \\ 
+  $x_2 = $ & $3$ & $0$ & $1$ & $1$ & $0$ & $1$ & $-1$ & $0$ & $1$ \\ \cline{2-10}
+  \end{tabular}
+\end{table}
+\egroup
+Optimal solution is
+\[
+  (x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_8) = (2, 3, 0, 2, 0, 0, 0, 0)
+\]
+Optimal solution is Q(0), so the problem is feasible, and we now find the initial basis
+None of the new variables are in the basis, so we have found an initial basic feasible solution!
+
+\subsection*{(c)}
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrr|}
+  \cline{2-7}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ \\ \cline{2-7}
+    & $13$ & $0$ & $0$ & $-1$ & $0$ & $1$ \\ \cline{2-7}
+  $x_4 = $ & $2$ & $0$ & $0$ & $-1$ & $1$ & $-1$ \\ 
+  $x_1 = $ & $2$ & $1$ & $0$ & $0$ & $0$ & $-1$ \\ 
+  $x_2 = $ & $3$ & $0$ & $1$ & $1$ & $0$ & $1$ \\ \cline{2-7}
+  \end{tabular}
+\end{table}
+\egroup
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrr|}
+  \cline{2-7}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ \\ \cline{2-7}
+    & $16$ & $0$ & $1$ & $0$ & $0$ & $2$ \\ \cline{2-7}
+  $x_4 = $ & $5$ & $0$ & $1$ & $0$ & $1$ & $0$ \\ 
+  $x_1 = $ & $2$ & $1$ & $0$ & $0$ & $0$ & $-1$ \\ 
+  $x_3 = $ & $3$ & $0$ & $1$ & $1$ & $0$ & $1$ \\ \cline{2-7}
+  \end{tabular}
+\end{table}
+\egroup
+Optimal solution is
+\[
+  (x_1, x_2, x_3, x_4, x_5) = (2, 0, 3, 5, 0)
+\]
+
+\subsection*{(g)}
+Standard form
+\begin{quote}
+  Minimize $-2x_1-3x_2-4x_3$ \\
+  s.t.
+  \begin{align*}
+    x_1+x_2+x_3 &= 5, \\
+    2x_1+x_2+2x_3-x_4 &= 5, \\
+    x_1+2x_2+2x_3+x_5 &= 8, \\
+    x_1, x_2, x_3, x_4, x_5 &\geq 0.
+  \end{align*}
+\end{quote}
+New standard form
+\begin{quote}
+  Minimize $-2x_1-x_2-x_3-3x_6$ \\
+  s.t.
+  \begin{align*}
+    x_1+x_2+x_3+x_6 &= 5, \\
+    2x_1+x_2+2x_3-x_4+x_6 &= 5, \\
+    x_1+2x_2+2x_3+x_5+x_6 &= 8, \\
+    x_1, x_2, x_3, x_4, x_5, x_6 &\geq 0.
+  \end{align*}
+\end{quote}
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrr|}
+  \cline{2-8}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ \\ \cline{2-8}
+    & $7$ & $0$ & $0$ & $0$ & $0$ & $-1$ & $-1$ \\ \cline{2-8}
+  $x_4 = $ & $5$ & $0$ & $1$ & $0$ & $1$ & $0$ & $1$ \\ 
+  $x_1 = $ & $2$ & $1$ & $0$ & $0$ & $0$ & $-1$ & $1$ \\ 
+  $x_3 = $ & $3$ & $0$ & $1$ & $1$ & $0$ & $1$ & $0$ \\ \cline{2-8}
+  \end{tabular}
+\end{table}
+\egroup
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrr|}
+  \cline{2-8}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ \\ \cline{2-8}
+    & $10$ & $0$ & $1$ & $1$ & $0$ & $0$ & $-1$ \\ \cline{2-8}
+  $x_4 = $ & $5$ & $0$ & $1$ & $0$ & $1$ & $0$ & $1$ \\ 
+  $x_1 = $ & $5$ & $1$ & $1$ & $1$ & $0$ & $0$ & $1$ \\ 
+  $x_5 = $ & $3$ & $0$ & $1$ & $1$ & $0$ & $1$ & $0$ \\ \cline{2-8}
+  \end{tabular}
+\end{table}
+\egroup
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrr|}
+  \cline{2-8}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ \\ \cline{2-8}
+    & $15$ & $1$ & $2$ & $2$ & $0$ & $0$ & $0$ \\ \cline{2-8}
+  $x_4 = $ & $0$ & $-1$ & $0$ & $-1$ & $1$ & $0$ & $0$ \\ 
+  $x_6 = $ & $5$ & $1$ & $1$ & $1$ & $0$ & $0$ & $1$ \\ 
+  $x_5 = $ & $3$ & $0$ & $1$ & $1$ & $0$ & $1$ & $0$ \\ \cline{2-8}
+  \end{tabular}
+\end{table}
+\egroup
+Optimal solution is
+\[
+  (x_1, x_2, x_3, x_4, x_5, x_6) = (0, 0, 0, 0, 3, 5)
+\]
+
+\section*{Opg 2}
+\subsection*{(a)}
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrr|}
+  \cline{2-8}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ \\ \cline{2-8}
+    & $\tfrac{3}{2}$ & $0$ & $0$ & $0$ & $0$ & $\tfrac{1}{2}$ & $0$ \\ \cline{2-8}
+  $x_2 = $ & $\tfrac{1}{2}$ & $0$ & $1$ & $0$ & $0$ & $\tfrac{1}{2}$ & $0$ \\ 
+  $x_3 = $ & $\tfrac{1}{2}$ & $0$ & $0$ & $1$ & $0$ & $-\tfrac{1}{2}$ & $0$ \\ 
+  $x_4 = $ & $\tfrac{1}{2}$ & $0$ & $0$ & $0$ & $1$ & $\tfrac{1}{2}$ & $0$ \\ 
+  $x_6 = $ & $\tfrac{1}{2}$ & $1$ & $0$ & $0$ & $0$ & $\tfrac{1}{2}$ & $1$ \\ \cline{2-8}
+  \end{tabular}
+\end{table}
+\egroup
+Optimal solution is
+\[
+  (x_1, x_2, x_3, x_4, x_5, x_6) = (0, \tfrac{1}{2}, \tfrac{1}{2}, \tfrac{1}{2}, 0, \tfrac{1}{2})
+\]
+
+\subsection*{(d)}
+\begin{quote}
+  Minimize $-x_2-x_3-x_4$ \\
+  s.t.
+  \begin{align*}
+    x_1+x_2+x_5+x_6 &= 1, \\
+    x_2+x_3 &= 1, \\
+    x_3+x_4 &= 1, \\
+    x_2+x_4+x_5 &= 1, \\
+    x_2 &= 0, \\
+    x_3-x_5 &= 0, \\
+    x_4 &= 0, \\
+    x_1+x_6 &= 0, \\
+    x_1, x_2, x_3, x_4, x_5, x_6 &\geq 0.
+  \end{align*}
+\end{quote}
+Fjerner de sidste 3 ligninger da de er redundante, og løser:
+First we set up the auxillary linear program
+\begin{quote}
+  Minimize $x_7+x_8+x_9+x_10+x_11$ \\
+  s.t.
+  \begin{align*}
+    x_1+x_2+x_5+x_6+x_7 &= 1, \\
+    x_2+x_3+x_8 &= 1, \\
+    x_3+x_4+x_9 &= 1, \\
+    x_2+x_4+x_5+x_10 &= 1, \\
+    x_2+x_11 &= 0, \\
+    x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_8, x_9, x_10, x_11 &\geq 0.
+  \end{align*}
+\end{quote}
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrrrrrrr|}
+  \cline{2-13}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ & $x_7$ & $x_8$ & $x_9$ & $x_10$ & $x_11$ \\ \cline{2-13}
+    & $-4$ & $-1$ & $-4$ & $-2$ & $-2$ & $-2$ & $-1$ & $0$ & $0$ & $0$ & $0$ & $0$ \\ \cline{2-13}
+  $x_7 = $ & $1$ & $1$ & $1$ & $0$ & $0$ & $1$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ \\ 
+  $x_8 = $ & $1$ & $0$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ & $0$ \\ 
+  $x_9 = $ & $1$ & $0$ & $0$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ \\ 
+  $x_10 = $ & $1$ & $0$ & $1$ & $0$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ \\ 
+  $x_11 = $ & $0$ & $0$ & $1$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $1$ \\ \cline{2-13}
+  \end{tabular}
+\end{table}
+\egroup
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrrrrrrr|}
+  \cline{2-13}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ & $x_7$ & $x_8$ & $x_9$ & $x_10$ & $x_11$ \\ \cline{2-13}
+    & $-3$ & $0$ & $-3$ & $-2$ & $-2$ & $-1$ & $0$ & $1$ & $0$ & $0$ & $0$ & $0$ \\ \cline{2-13}
+  $x_1 = $ & $1$ & $1$ & $1$ & $0$ & $0$ & $1$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ \\ 
+  $x_8 = $ & $1$ & $0$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ & $0$ \\ 
+  $x_9 = $ & $1$ & $0$ & $0$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ \\ 
+  $x_10 = $ & $1$ & $0$ & $1$ & $0$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ \\ 
+  $x_11 = $ & $0$ & $0$ & $1$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $1$ \\ \cline{2-13}
+  \end{tabular}
+\end{table}
+\egroup
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrrrrrrr|}
+  \cline{2-13}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ & $x_7$ & $x_8$ & $x_9$ & $x_10$ & $x_11$ \\ \cline{2-13}
+    & $-3$ & $0$ & $0$ & $-2$ & $-2$ & $-1$ & $0$ & $1$ & $0$ & $0$ & $0$ & $3$ \\ \cline{2-13}
+  $x_1 = $ & $1$ & $1$ & $0$ & $0$ & $0$ & $1$ & $1$ & $1$ & $0$ & $0$ & $0$ & $-1$ \\ 
+  $x_8 = $ & $1$ & $0$ & $0$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ & $-1$ \\ 
+  $x_9 = $ & $1$ & $0$ & $0$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ \\ 
+  $x_10 = $ & $1$ & $0$ & $0$ & $0$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $-1$ \\ 
+  $x_2 = $ & $0$ & $0$ & $1$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $1$ \\ \cline{2-13}
+  \end{tabular}
+\end{table}
+\egroup
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrrrrrrr|}
+  \cline{2-13}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ & $x_7$ & $x_8$ & $x_9$ & $x_10$ & $x_11$ \\ \cline{2-13}
+    & $-1$ & $0$ & $0$ & $0$ & $0$ & $-1$ & $0$ & $1$ & $0$ & $2$ & $0$ & $3$ \\ \cline{2-13}
+  $x_1 = $ & $1$ & $1$ & $0$ & $0$ & $0$ & $1$ & $1$ & $1$ & $0$ & $0$ & $0$ & $-1$ \\ 
+  $x_8 = $ & $0$ & $0$ & $0$ & $0$ & $-1$ & $0$ & $0$ & $0$ & $1$ & $-1$ & $0$ & $-1$ \\ 
+  $x_3 = $ & $1$ & $0$ & $0$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ \\ 
+  $x_10 = $ & $1$ & $0$ & $0$ & $0$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $-1$ \\ 
+  $x_2 = $ & $0$ & $0$ & $1$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $1$ \\ \cline{2-13}
+  \end{tabular}
+\end{table}
+\egroup
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrrrrrrr|}
+  \cline{2-13}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ & $x_7$ & $x_8$ & $x_9$ & $x_10$ & $x_11$ \\ \cline{2-13}
+    & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ & $1$ & $0$ & $2$ & $1$ & $2$ \\ \cline{2-13}
+  $x_1 = $ & $0$ & $1$ & $0$ & $0$ & $-1$ & $0$ & $1$ & $1$ & $0$ & $0$ & $-1$ & $0$ \\ 
+  $x_8 = $ & $0$ & $0$ & $0$ & $0$ & $-1$ & $0$ & $0$ & $0$ & $1$ & $-1$ & $0$ & $-1$ \\ 
+  $x_3 = $ & $1$ & $0$ & $0$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ \\ 
+  $x_5 = $ & $1$ & $0$ & $0$ & $0$ & $1$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $-1$ \\ 
+  $x_2 = $ & $0$ & $0$ & $1$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $1$ \\ \cline{2-13}
+  \end{tabular}
+\end{table}
+\egroup
+Optimal solution is
+\[
+  (x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_8, x_9, x_10, x_11) = (0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0)
+\]
+Optimal solution is Q(0), so the problem is feasible, and we now find the initial basis
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrrrrrrr|}
+  \cline{2-13}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ & $x_7$ & $x_8$ & $x_9$ & $x_10$ & $x_11$ \\ \cline{2-13}
+    & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $1$ & $1$ & $1$ & $1$ & $1$ \\ \cline{2-13}
+  $x_1 = $ & $0$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $1$ & $-1$ & $1$ & $-1$ & $1$ \\ 
+  $x_4 = $ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ & $0$ & $-1$ & $1$ & $0$ & $1$ \\ 
+  $x_3 = $ & $1$ & $0$ & $0$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ & $-1$ \\ 
+  $x_5 = $ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ & $1$ & $-1$ & $1$ & $-2$ \\ 
+  $x_2 = $ & $0$ & $0$ & $1$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $1$ \\ \cline{2-13}
+  \end{tabular}
+\end{table}
+\egroup
+None of the new variables are in the basis, so we have found an initial basic feasible solution!
+\bgroup
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \begin{tabular}{r|r|rrrrrr|}
+  \cline{2-8}
+    &   & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ \\ \cline{2-8}
+    & $1$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ \\ \cline{2-8}
+  $x_1 = $ & $0$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ \\ 
+  $x_4 = $ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ & $0$ \\ 
+  $x_3 = $ & $1$ & $0$ & $0$ & $1$ & $0$ & $0$ & $0$ \\ 
+  $x_5 = $ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ & $0$ \\ 
+  $x_2 = $ & $0$ & $0$ & $1$ & $0$ & $0$ & $0$ & $0$ \\ \cline{2-8}
+  \end{tabular}
+\end{table}
+\egroup
+Optimal solution is
+\[
+  (x_1, x_2, x_3, x_4, x_5, x_6) = (0, 0, 1, 0, 1, 0)
+\]
+
+\section*{Opg 3}
+\subsection*{(a)}
+We now have the tree $T$ is $(s1, d1)$, $(s1, d4)$, $(s2, d1)$, $(s2, d3)$, $(s3, d2)$, $(s3, d3)$ \\
+This gives us the basic feasible solution \\
+$f_{s1,d1} = 20$, $f_{s1,d2} = 0$, $f_{s1,d3} = 0$, $f_{s1,d4} = 16$, $f_{s2,d1} = 25$, $f_{s2,d2} = 0$, $f_{s2,d3} = 17$, $f_{s2,d4} = 0$, $f_{s3,d1} = 0$, $f_{s3,d2} = 23$, $f_{s3,d3} = 19$, $f_{s3,d4} = 0$ \\
+Now we compute the dual vector. The equation system is \\
+$p_{s1} - p_{d1} = 6$, \\
+$p_{s1} - p_{d4} = 4$, \\
+$p_{s2} - p_{d1} = 2$, \\
+$p_{s2} - p_{d3} = 9$, \\
+$p_{s3} - p_{d2} = 3$, \\
+$p_{s3} - p_{d3} = 8$, \\
+$p_{d4} = 0$. \\
+This has the solution $p = (4, 0, -1, -2, -4, -9, 0)$. \\
+The reduced costs $\overline{{c}}_{{ij}}$ are: \\
+$\overline{c}_{s1,d1} = 0$, $\overline{c}_{s1,d2} = -3$, $\overline{c}_{s1,d3} = -2$, $\overline{c}_{s1,d4} = 0$ \\ 
+$\overline{c}_{s2,d1} = 0$, $\overline{c}_{s2,d2} = 4$, $\overline{c}_{s2,d3} = 0$, $\overline{c}_{s2,d4} = 6$ \\ 
+$\overline{c}_{s3,d1} = 9$, $\overline{c}_{s3,d2} = 0$, $\overline{c}_{s3,d3} = 0$, $\overline{c}_{s3,d4} = 3$ \\
+Some of the reduced costs outside our tree are negative, so the $f_{{ij}}$ are not optimal.
+Associated to one such negative cost is the edge (s1, d2) which we add to $T$.
+
+\subsection*{(c)}
+We now have the tree $T$ is $(s1, d1)$, $(s1, d4)$, $(s2, d1)$, $(s2, d3)$, $(s3, d2)$, $(s3, d3)$ \\
+This gives us the basic feasible solution \\
+$f_{s1,d1} = 20$, $f_{s1,d2} = 0$, $f_{s1,d3} = 0$, $f_{s1,d4} = 16$, $f_{s2,d1} = 25$, $f_{s2,d2} = 0$, $f_{s2,d3} = 17$, $f_{s2,d4} = 0$, $f_{s3,d1} = 0$, $f_{s3,d2} = 23$, $f_{s3,d3} = 19$, $f_{s3,d4} = 0$ \\
+Now we compute the dual vector. The equation system is \\
+$p_{s1} - p_{d1} = 6$, \\
+$p_{s1} - p_{d4} = 4$, \\
+$p_{s2} - p_{d1} = 2$, \\
+$p_{s2} - p_{d3} = 9$, \\
+$p_{s3} - p_{d2} = 3$, \\
+$p_{s3} - p_{d3} = 8$, \\
+$p_{d4} = 0$. \\
+This has the solution $p = (4, 0, -1, -2, -4, -9, 0)$. \\
+The reduced costs $\overline{{c}}_{{ij}}$ are: \\
+$\overline{c}_{s1,d1} = 0$, $\overline{c}_{s1,d2} = -3$, $\overline{c}_{s1,d3} = -2$, $\overline{c}_{s1,d4} = 0$ \\ 
+$\overline{c}_{s2,d1} = 0$, $\overline{c}_{s2,d2} = 4$, $\overline{c}_{s2,d3} = 0$, $\overline{c}_{s2,d4} = 6$ \\ 
+$\overline{c}_{s3,d1} = 9$, $\overline{c}_{s3,d2} = 0$, $\overline{c}_{s3,d3} = 0$, $\overline{c}_{s3,d4} = 3$ \\
+Some of the reduced costs outside our tree are negative, so the $f_{{ij}}$ are not optimal.
+Associated to one such negative cost is the edge (s1, d2) which we add to $T$.
+We have the following cycle: $(s1, d2)$, $(s3, d2)$, $(s3, d3)$, $(s2, d3)$, $(s2, d1)$, $(s1, d1)$, where \\
+$F$ is $(s1, d2)$, $(s3, d3)$, $(s2, d1)$ \\
+$B$ is $(s3, d2)$, $(s2, d3)$, $(s1, d1)$ \\
+We get $\theta^* = 17$ and adjust the flow accordingly.
+We remove (s2, d3) from $T$, and we now have a tree once again.
+We now have the tree $T$ is $(s1, d1)$, $(s1, d4)$, $(s2, d1)$, $(s3, d2)$, $(s3, d3)$, $(s1, d2)$ \\
+This gives us the basic feasible solution \\
+$f_{s1,d1} = 3$, $f_{s1,d2} = 17$, $f_{s1,d3} = 0$, $f_{s1,d4} = 16$, $f_{s2,d1} = 42$, $f_{s2,d2} = 0$, $f_{s2,d3} = 0$, $f_{s2,d4} = 0$, $f_{s3,d1} = 0$, $f_{s3,d2} = 6$, $f_{s3,d3} = 36$, $f_{s3,d4} = 0$ \\
+Now we compute the dual vector. The equation system is \\
+$p_{s1} - p_{d1} = 6$, \\
+$p_{s1} - p_{d4} = 4$, \\
+$p_{s2} - p_{d1} = 2$, \\
+$p_{s3} - p_{d2} = 3$, \\
+$p_{s3} - p_{d3} = 8$, \\
+$p_{s1} - p_{d2} = 5$, \\
+$p_{d4} = 0$. \\
+This has the solution $p = (4, 0, 2, -2, -1, -6, 0)$. \\
+The reduced costs $\overline{{c}}_{{ij}}$ are: \\
+$\overline{c}_{s1,d1} = 0$, $\overline{c}_{s1,d2} = 0$, $\overline{c}_{s1,d3} = 1$, $\overline{c}_{s1,d4} = 0$ \\ 
+$\overline{c}_{s2,d1} = 0$, $\overline{c}_{s2,d2} = 7$, $\overline{c}_{s2,d3} = 3$, $\overline{c}_{s2,d4} = 6$ \\ 
+$\overline{c}_{s3,d1} = 6$, $\overline{c}_{s3,d2} = 0$, $\overline{c}_{s3,d3} = 0$, $\overline{c}_{s3,d4} = 0$ \\
+All reduced costs outside our tree are nonnegative, which means that the basic feasible solution $f_{{ij}}$ is optimal.
+$[3, 17, 0, 16, 42, 0, 0, 0, 0, 6, 36, 0]$
+
+
+\end{document}
